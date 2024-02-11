@@ -1,4 +1,6 @@
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
     private JFrame window;
@@ -6,7 +8,7 @@ public class Main {
     public Main() {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
+        window.setResizable(true);
         window.setSize(GamePanel.WIDTH, GamePanel.HEIGHT);
         window.setLocationRelativeTo(null);
         window.setTitle("Flappy Bird");
@@ -15,6 +17,13 @@ public class Main {
     public void startGame() {
         MenuPanel menuPanel = new MenuPanel();
         GamePanel gamePanel = new GamePanel();
+        Timer time=new Timer(20, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePanel.repaint();
+                gamePanel.Move();
+            }
+        });
 
         window.add(menuPanel);
         window.setVisible(true);
@@ -26,6 +35,7 @@ public class Main {
                 window.add(gamePanel);
                 window.revalidate();
                 gamePanel.requestFocusInWindow(); // Ensure the game panel has focus for key events
+                time.start();
             }
         });
     }
