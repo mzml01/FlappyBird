@@ -1,0 +1,4 @@
+There is problem while generating the wall on the screen. we know there must be a gap on the screen that is 200 px.
+but sometimes the wall appears with just little to no gap for the bird to pass through.
+Go through the code help e with finding a better logic for it.
+the program is not well structured so try ur best
