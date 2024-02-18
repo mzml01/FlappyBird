@@ -3,7 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Main {
-    private JFrame window;
+    public static JFrame window;
+    public static Timer time,time2;
+    private static int proceed=3;
 
     public Main() {
         window = new JFrame();
@@ -17,7 +19,7 @@ public class Main {
     public void startGame() {
         MenuPanel menuPanel = new MenuPanel();
         GamePanel gamePanel = new GamePanel();
-        Timer time=new Timer(20, new ActionListener() {
+        time=new Timer(20, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gamePanel.repaint();
@@ -35,7 +37,22 @@ public class Main {
                 window.add(gamePanel);
                 window.revalidate();
                 gamePanel.requestFocusInWindow(); // Ensure the game panel has focus for key events
-                time.start();
+//                time.start();
+                time2=new Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        proceed--;
+                        GamePanel.proceed=proceed;
+                        GamePanel.starting=true;
+                        gamePanel.repaint();
+                        if(proceed==0){
+                            time.start();
+                            time2.stop();
+                            GamePanel.starting=false;
+                        }
+                    }
+                });
+                time2.start();
             }
         });
     }
@@ -43,5 +60,8 @@ public class Main {
     public static void main(String[] args) {
         Main obj = new Main();
         obj.startGame();
+    }
+    public static JFrame getWindow(){
+        return window;
     }
 }

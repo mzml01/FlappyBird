@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -8,7 +9,8 @@ import java.util.Random;
 public class WallImage {
     private Random r = new Random();
     public int X;
-    private int Y=r.nextInt((GamePanel.HEIGHT/2)+200);
+    public int Y=r.nextInt((GamePanel.HEIGHT)+200);
+
     private int width_wall=45;
     private int height=GamePanel.HEIGHT-Y;
     private int gap = 200; // Gap between the two pipes
@@ -17,6 +19,7 @@ public class WallImage {
 
     public WallImage(int X) {
         this.X = X;
+
         LoadImage();
     }
 
@@ -50,17 +53,30 @@ public boolean intersects(Rectangle rect1, Rectangle rect2) {
     return rect1.intersects(rect2);
 }
 
-    public void checkIntersection() {
+    public boolean checkIntersection() {
         Rectangle lower = new Rectangle(X, Y, width_wall, height);
         Rectangle upper = new Rectangle(X, 0, width_wall, GamePanel.HEIGHT - (height + gap));
 
         Rectangle birdRect = BirdImage.birdrect(); // Ensure this method returns a Rectangle
 
         if (intersects(lower, birdRect) || intersects(upper, birdRect)) {
-            BirdImage.reset();
-            wall_reset();
-
+            boolean option = GamePanel.popUp();
+            if(option){
+                try{
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                BirdImage.reset();
+                wall_reset();
+                GamePanel.score=0;
+            }else{
+                JFrame window=Main.getWindow();
+                window.dispose();
+                Main.time.stop();
+            }
         }
+        return lower.intersects(birdRect);
     }
     private void wall_reset(){
         Y=r.nextInt((GamePanel.HEIGHT/2)+200);

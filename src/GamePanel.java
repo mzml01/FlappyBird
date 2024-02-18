@@ -1,3 +1,4 @@
+import javax.swing.JOptionPane;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,10 @@ public class GamePanel extends JPanel {
     private BufferedImage img;
     public static boolean Gameover=false;
     public int xcoor=0;
+    public static int  score = 0;
+    public static boolean starting=false;
+    public static int proceed=-1;
+
     BirdImage bdimg=new BirdImage();
     WallImage wimg=new WallImage(GamePanel.WIDTH);
     WallImage wimg2=new WallImage((GamePanel.WIDTH)+(GamePanel.WIDTH/2));
@@ -37,6 +42,7 @@ public class GamePanel extends JPanel {
         }
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -47,6 +53,11 @@ public class GamePanel extends JPanel {
         bdimg.birdview(g);
         wimg.wallView(g);
         wimg2.wallView(g);
+        g.drawString("Score: " + score, 20, 20);
+        if(starting){
+            g.setFont(new Font("Arial",Font.BOLD,150));
+            g.drawString(Integer.toString(proceed), WIDTH/2-75, 250);
+        }
 
     }
 
@@ -69,5 +80,18 @@ public class GamePanel extends JPanel {
         if(xcoor==-2400){
             xcoor=0;
         }
+        System.out.println(wimg.X+"-> "+bdimg.x+":"+wimg2.X+"->"+bdimg.x);
+        if(wimg.X==bdimg.x || wimg2.X == bdimg.x){
+            score+=1;
+        }
     }
+    public static boolean popUp(){
+        int result = JOptionPane.showConfirmDialog(null, "Game Over! Your Score is: "+score+"\nDo you want to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+        if(result == JOptionPane.YES_OPTION){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

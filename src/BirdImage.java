@@ -1,10 +1,11 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class BirdImage {
-    public static int bird_dia=45;
+    public static int bird_dia=42;
     public static int x=(GamePanel.WIDTH/2)-bird_dia;
     public static int y=(GamePanel.HEIGHT/2);
     private static int speed=2;
@@ -28,12 +29,27 @@ public class BirdImage {
         if(y>0 && y<GamePanel.HEIGHT){
             speed+=acce;
             y+=speed;
-        }else reset();
+        }else {
+            boolean option = GamePanel.popUp();
+            if(option){
+                try{
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                reset();
+            }else{
+                JFrame window=Main.getWindow();
+                window.dispose();
+                Main.time.stop();
+            }
+        }
     }
     public static void reset(){
         speed=2;
         y=GamePanel.HEIGHT/2;
         GamePanel.Gameover=true;
+        GamePanel.score=0;
     }
     public void goUpward(){
         speed=-14;
